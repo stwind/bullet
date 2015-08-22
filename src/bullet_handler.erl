@@ -1,4 +1,4 @@
-%% Copyright (c) 2011-2012, Loïc Hoguin <essen@ninenines.eu>
+%% Copyright (c) 2012-2012, Loïc Hoguin <essen@ninenines.eu>
 %%
 %% Permission to use, copy, modify, and/or distribute this software for any
 %% purpose with or without fee is hereby granted, provided that the above
@@ -145,7 +145,7 @@ websocket_handle({text, Data}, Req,
 			{reply, {text, Reply}, Req2,
 				State#state{handler_state=HandlerState2}, hibernate};
 		{shutdown, Req2, HandlerState2} ->
-			{shutdown, Req2, State#state{handler_state=HandlerState2}}
+			{stop, Req2, State#state{handler_state=HandlerState2}}
 	end;
 websocket_handle(_Frame, Req, State) ->
 	{ok, Req, State, hibernate}.
@@ -159,7 +159,7 @@ websocket_info(Info, Req, State=#state{
 			{reply, {text, Reply}, Req2,
 				State#state{handler_state=HandlerState2}, hibernate};
 		{shutdown, Req2, HandlerState2} ->
-			{shutdown, Req2, State#state{handler_state=HandlerState2}}
+			{stop, Req2, State#state{handler_state=HandlerState2}}
 	end.
 
 websocket_terminate(_Reason, Req,
