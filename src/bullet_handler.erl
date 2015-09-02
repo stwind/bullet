@@ -117,10 +117,13 @@ info(Message, Req,
 			end
 	end.
 
-terminate(_Reason, _Req, undefined) ->
+terminate(Reason, _Req, undefined) ->
 	ok;
-terminate(_Reason, Req, #state{handler=Handler, handler_state=HandlerState}) ->
-	Handler:terminate(Req, HandlerState).
+terminate(Reason, Req, #state{handler=Handler, handler_state=HandlerState}) ->
+	Handler:terminate(Reason, Req, HandlerState);
+terminate(Reason, Req, Opts) -> %% terminate during init
+    Handler = proplists:get_value(handler, Opts),
+	Handler:terminate(Reason, Req, undefined).
 
 %% Websocket.
 
